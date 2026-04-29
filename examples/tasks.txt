@@ -1,0 +1,4 @@
+# AICTX demo task file
+TODO: record quick start
+TODO: capture session one
+DONE: create demo repository
