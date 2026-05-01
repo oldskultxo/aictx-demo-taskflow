@@ -1,5 +1,4 @@
-# This file is intentionally useful for the AICTX video demo.
-# Baseline v0.1.0 supports TODO and DONE only.
+# Session 1 target includes BLOCKED in the summary.
 
 TODO: add BLOCKED status support
 DONE: create parser tests

@@ -22,6 +22,14 @@ def test_parse_done_line() -> None:
     assert task.title == "add tests"
 
 
+def test_parse_blocked_line() -> None:
+    task = parse_task_line("BLOCKED: waiting for API")
+
+    assert task is not None
+    assert task.status == TaskStatus.BLOCKED
+    assert task.title == "waiting for API"
+
+
 def test_parse_is_case_insensitive_for_supported_statuses() -> None:
     task = parse_task_line("todo: trim lowercase input")
 
@@ -34,6 +42,7 @@ def test_parse_ignores_blank_lines_and_comments() -> None:
     assert parse_task_line("") is None
     assert parse_task_line("   ") is None
     assert parse_task_line("# comment") is None
+    assert parse_task_line("\ufeff# comment") is None
 
 
 def test_parse_tasks_multiple_lines() -> None:
@@ -61,6 +70,35 @@ def test_parse_requires_title() -> None:
         parse_task_line("TODO:", line_number=4)
 
 
-def test_blocked_is_not_supported_in_baseline() -> None:
-    with pytest.raises(TaskParseError, match="unsupported task status 'BLOCKED'"):
-        parse_task_line("BLOCKED: waiting for API")
+def test_parse_tasks_accepts_blocked_status() -> None:
+    tasks = parse_tasks(
+        """
+        TODO: record demo
+        BLOCKED: waiting for API
+        DONE: write README
+        """
+    )
+
+    assert [task.as_line() for task in tasks] == [
+        "TODO: record demo",
+        "BLOCKED: waiting for API",
+        "DONE: write README",
+    ]
+
+
+def test_parse_supports_utf8_bom_prefixed_status_line() -> None:
+    task = parse_task_line("\ufeffBLOCKED: waiting for API")
+
+    assert task is not None
+    assert task.status == TaskStatus.BLOCKED
+    assert task.title == "waiting for API"
+
+
+def test_parse_tasks_supports_utf8_bom_prefixed_input() -> None:
+    tasks = parse_tasks("\ufeffTODO: record demo\nBLOCKED: waiting for API\nDONE: write README\n")
+
+    assert [task.as_line() for task in tasks] == [
+        "TODO: record demo",
+        "BLOCKED: waiting for API",
+        "DONE: write README",
+    ]

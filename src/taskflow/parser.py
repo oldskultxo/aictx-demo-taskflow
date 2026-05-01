@@ -10,7 +10,10 @@ class TaskParseError(ValueError):
 
 
 def _normalize_line(raw_line: str) -> str:
-    return raw_line.strip()
+    line = raw_line.strip()
+    if line.startswith("\ufeff"):
+        line = line.removeprefix("\ufeff").strip()
+    return line
 
 
 def parse_task_line(raw_line: str, *, line_number: int | None = None) -> Task | None:
