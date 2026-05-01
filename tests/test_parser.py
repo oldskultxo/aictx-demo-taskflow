@@ -61,6 +61,25 @@ def test_parse_requires_title() -> None:
         parse_task_line("TODO:", line_number=4)
 
 
-def test_blocked_is_not_supported_in_baseline() -> None:
-    with pytest.raises(TaskParseError, match="unsupported task status 'BLOCKED'"):
-        parse_task_line("BLOCKED: waiting for API")
+def test_parse_blocked_line() -> None:
+    task = parse_task_line("BLOCKED: waiting for API")
+
+    assert task is not None
+    assert task.status == TaskStatus.BLOCKED
+    assert task.title == "waiting for API"
+
+
+def test_parse_blocked_line_is_case_insensitive_and_trims_whitespace() -> None:
+    task = parse_task_line("  blocked : waiting for API  ")
+
+    assert task is not None
+    assert task.status == TaskStatus.BLOCKED
+    assert task.title == "waiting for API"
+
+
+def test_parse_unsupported_status_lists_blocked_in_allowed_values() -> None:
+    with pytest.raises(
+        TaskParseError,
+        match="unsupported task status 'WAITING' \\(expected: TODO, DONE, BLOCKED\\)",
+    ):
+        parse_task_line("waiting: on API", line_number=7)

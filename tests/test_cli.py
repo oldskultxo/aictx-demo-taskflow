@@ -7,7 +7,7 @@ from pathlib import Path
 
 def test_cli_reads_file(tmp_path: Path) -> None:
     task_file = tmp_path / "tasks.txt"
-    task_file.write_text("TODO: record demo\nDONE: add tests\n", encoding="utf-8")
+    task_file.write_text("TODO: record demo\nDONE: add tests\nBLOCKED: wait for deploy\n", encoding="utf-8")
 
     result = subprocess.run(
         [sys.executable, "-m", "taskflow.cli", str(task_file)],
@@ -17,11 +17,11 @@ def test_cli_reads_file(tmp_path: Path) -> None:
     )
 
     assert result.returncode == 0
-    assert result.stdout.strip() == "todo: 1\ndone: 1\ntotal: 2"
+    assert result.stdout.strip() == "todo: 1\ndone: 1\nblocked: 1\ntotal: 3"
     assert result.stderr == ""
 
 
-def test_cli_reports_parse_errors(tmp_path: Path) -> None:
+def test_cli_accepts_blocked_tasks(tmp_path: Path) -> None:
     task_file = tmp_path / "tasks.txt"
     task_file.write_text("BLOCKED: waiting for API\n", encoding="utf-8")
 
@@ -32,5 +32,6 @@ def test_cli_reports_parse_errors(tmp_path: Path) -> None:
         check=False,
     )
 
-    assert result.returncode == 2
-    assert "unsupported task status 'BLOCKED'" in result.stderr
+    assert result.returncode == 0
+    assert result.stdout.strip() == "todo: 0\ndone: 0\nblocked: 1\ntotal: 1"
+    assert result.stderr == ""
