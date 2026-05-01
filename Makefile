@@ -5,7 +5,7 @@ VENV_PIP := $(VENV_PYTHON) -m pip
 VENV_READY := $(VENV)/.taskflow-ready
 INSTALL_INPUTS := pyproject.toml Makefile $(shell find src tests -type f | sort)
 
-.PHONY: check-python venv install test test-no-install run demo-target clean ci
+.PHONY: check-python venv install test test-no-install run demo-target clean ci codex-last-session codex-usage-report codex-usage-report-json
 
 check-python:
 	@$(PYTHON) -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)' || { echo "taskflow demo requires Python >= 3.11. Run with: make test PYTHON=python3.12"; exit 1; }
@@ -39,3 +39,13 @@ ci: test run demo-target
 clean:
 	rm -rf .pytest_cache build dist *.egg-info src/*.egg-info src/taskflow/__pycache__ tests/__pycache__
 
+
+
+codex-last-session:
+	@$(PYTHON) scripts/codex_usage_report.py --json | $(PYTHON) -c 'import json,sys; print(json.load(sys.stdin)["session_file"])'
+
+codex-usage-report:
+	@$(PYTHON) scripts/codex_usage_report.py
+
+codex-usage-report-json:
+	@$(PYTHON) scripts/codex_usage_report.py --json
