@@ -1,0 +1,39 @@
+{
+  "files_explored": [
+    "src/taskflow/cli.py",
+    "scripts/codex_usage_report.py",
+    "src/taskflow/summary.py",
+    "src/taskflow/models.py",
+    "src/taskflow/parser.py",
+    "tests/test_summary.py",
+    "tests/test_cli.py",
+    "tests/test_parser.py"
+  ],
+  "files_edited": [
+    "src/taskflow/models.py",
+    "src/taskflow/summary.py",
+    "tests/test_summary.py",
+    "tests/test_cli.py",
+    "tests/test_parser.py"
+  ],
+  "commands_run": [
+    "aictx resume --repo . --task \"Add support for BLOCKED tasks in the task summary output. Update tests and run them. Leave parser edge cases for the next session.\" --json",
+    "sed -n '1,260p' src/taskflow/cli.py",
+    "sed -n '1,260p' scripts/codex_usage_report.py",
+    "sed -n '1,260p' src/taskflow/summary.py",
+    "sed -n '1,260p' src/taskflow/models.py",
+    "sed -n '1,260p' src/taskflow/parser.py",
+    "sed -n '1,260p' tests/test_summary.py",
+    "sed -n '1,260p' tests/test_cli.py",
+    "make test",
+    "sed -n '1,220p' tests/test_parser.py",
+    "make test"
+  ],
+  "tests_run": [
+    "make test (failed: tests/test_parser.py::test_blocked_is_not_supported_in_baseline)",
+    "make test (passed: 14 passed)"
+  ],
+  "next_step_left_for_session_2": "Handle parser edge cases for BLOCKED and related input normalization/error coverage.",
+  "notes": "Added BLOCKED status support to summaries and updated parser/CLI/summary tests accordingly.",
+  "time_to_complete": "1' 34''"
+}

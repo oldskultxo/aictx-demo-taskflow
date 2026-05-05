@@ -1,0 +1,41 @@
+{
+  "files_explored": [
+    "src/taskflow/models.py",
+    "src/taskflow/parser.py",
+    "src/taskflow/summary.py",
+    "src/taskflow/cli.py",
+    "tests/test_parser.py",
+    "tests/test_summary.py",
+    "tests/test_cli.py",
+    "examples/session_1_target.txt",
+    "pyproject.toml"
+  ],
+  "files_edited": [
+    "src/taskflow/models.py",
+    "src/taskflow/summary.py",
+    "tests/test_parser.py",
+    "tests/test_summary.py",
+    "tests/test_cli.py",
+    "examples/session_1_target.txt"
+  ],
+  "commands_run": [
+    "pwd && rg -n \"task summary|summary output|BLOCKED|blocked|Task summary|status\" -S .",
+    "find . -maxdepth 3 -type f | sed 's#^./##' | sort",
+    "sed -n '1,220p' src/taskflow/models.py",
+    "sed -n '1,220p' src/taskflow/parser.py",
+    "sed -n '1,220p' src/taskflow/summary.py",
+    "sed -n '1,220p' tests/test_parser.py && printf '\\n---FILE---\\n' && sed -n '1,220p' tests/test_summary.py && printf '\\n---FILE---\\n' && sed -n '1,220p' tests/test_cli.py",
+    "sed -n '1,220p' src/taskflow/cli.py",
+    "sed -n '1,120p' examples/session_1_target.txt",
+    "pytest -q",
+    ".venv/bin/pytest -q",
+    "sed -n '1,220p' pyproject.toml"
+  ],
+  "tests_run": [
+    "pytest -q (failed: command not found)",
+    ".venv/bin/pytest -q (15 passed)"
+  ],
+  "next_step_left_for_session_2": "Validate and tighten BLOCKED parser edge cases without changing the new summary behavior.",
+  "notes": "Added BLOCKED to TaskStatus and summary formatting/counts. Updated parser, summary, and CLI tests to cover supported BLOCKED flows; fixed CLI subprocess tests by injecting PYTHONPATH for src layout.",
+  "time_to_complete": "1' 43''"
+}

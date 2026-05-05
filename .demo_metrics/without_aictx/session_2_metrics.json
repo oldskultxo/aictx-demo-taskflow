@@ -1,0 +1,48 @@
+{
+  "files_explored": [
+    "README.md",
+    "src/taskflow/parser.py",
+    "tests/test_parser.py",
+    "src/taskflow/models.py",
+    "src/taskflow/summary.py",
+    "tests/test_summary.py",
+    "src/taskflow/cli.py",
+    "tests/test_cli.py",
+    "examples/session_1_target.txt",
+    "pyproject.toml"
+  ],
+  "files_edited": [
+    "src/taskflow/parser.py",
+    "tests/test_parser.py",
+    "tests/test_cli.py"
+  ],
+  "commands_run": [
+    "pwd && ls -la && printf '\n--- git status ---\n' && git status --short && printf '\n--- top files ---\n' && find . -maxdepth 2 -type f | sed 's#^./##' | sort | head -200",
+    "rg -n \"Parser|parser|edge case|edge-case|next session|session\" -S .",
+    "sed -n '130,170p' README.md",
+    "sed -n '1,240p' src/taskflow/parser.py",
+    "sed -n '1,240p' tests/test_parser.py",
+    "sed -n '1,220p' src/taskflow/models.py && printf '\n---\n' && sed -n '1,240p' src/taskflow/summary.py && printf '\n---\n' && sed -n '1,220p' tests/test_summary.py",
+    "sed -n '1,220p' src/taskflow/cli.py",
+    "sed -n '1,240p' tests/test_cli.py",
+    "git diff -- src/taskflow/parser.py src/taskflow/models.py src/taskflow/summary.py tests/test_parser.py tests/test_summary.py tests/test_cli.py examples/session_1_target.txt",
+    "pytest -q",
+    "sed -n '1,220p' pyproject.toml && printf '\n---\n' && ./.venv/bin/python -m pytest -q",
+    "rg -n \"edge case|edge-case|blocked task parsing|BOM|comment|whitespace|separator\" README.md tests src -S",
+    "./.venv/bin/python -m pytest -q tests/test_parser.py tests/test_cli.py",
+    "./.venv/bin/python -m pytest -q",
+    "./.venv/bin/python - <<'PY'\ntext = '''# Task goal\nContinue the task: Parser edge cases for the next session.\n\n# Reporting instructions\nBefore your final answer, write `session_2_metrics.json` using this exact JSON shape:\n\n{\n  \"files_explored\": [],\n  \"files_edited\": [],\n  \"commands_run\": [],\n  \"tests_run\": [],\n  \"first_relevant_file\": \"\",\n  \"first_edit_file\": \"\",\n  \"exploration_steps_before_first_edit\": 0,\n  \"manual_context_words\": 0,\n  \"notes\": \"\"\n}\n\n## Reporting Rules:\n- `files_explored` includes only files you explicitly opened/read/inspected.\n- Do not include generated files.\n- Do not include files only touched by tests.\n- `exploration_steps_before_first_edit` counts file reads, directory listings, and exploratory commands before the first relevant edit.\n- `manual_context_words` is the approximate number of words of task/context recap provided by the user in this prompt.\n- If unsure, omit the item rather than guessing.\n'''\nimport re\nprint(len(re.findall(r\"\\S+\", text)))\nPY"
+  ],
+  "tests_run": [
+    "pytest -q",
+    "./.venv/bin/python -m pytest -q",
+    "./.venv/bin/python -m pytest -q tests/test_parser.py tests/test_cli.py",
+    "./.venv/bin/python -m pytest -q"
+  ],
+  "first_relevant_file": "README.md",
+  "first_edit_file": "src/taskflow/parser.py",
+  "exploration_steps_before_first_edit": 15,
+  "manual_context_words": 115,
+  "notes": "Validated and fixed a parser edge case for UTF-8 BOM-prefixed input so the first line of a file can still parse TODO/DONE/BLOCKED statuses.",
+  "time_to_complete": "1' 59''"
+}
